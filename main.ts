@@ -4,10 +4,16 @@ import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Set
 
 interface MyPluginSettings {
 	mySetting: string;
+	shortInterval: number;
+	longInterval: number;
+	focus: number;
 }
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
+	mySetting: 'default',
+	shortInterval: 5,
+	longInterval: 15,
+	focus: 25,
 }
 
 export default class MyPlugin extends Plugin {
@@ -130,5 +136,35 @@ class SampleSettingTab extends PluginSettingTab {
 					this.plugin.settings.mySetting = value;
 					await this.plugin.saveSettings();
 				}));
+		new Setting(containerEl)
+			.setName('shortInterval')
+			.setDesc('短い休憩時間(秒)')
+			.addText(text => text
+				.setPlaceholder('Enter short intervall')
+				.setValue(this.plugin.settings.shortInterval.toString())
+				.onChange(async (value) => {
+					this.plugin.settings.shortInterval = Number.parseInt(value);
+					await this.plugin.saveSettings();
+				}));
+		new Setting(containerEl)
+			.setName('longInterval')
+			.setDesc('長い休憩時間(秒)')
+			.addText(text => text
+				.setPlaceholder('Enter long interval')
+				.setValue(this.plugin.settings.longInterval.toString())
+				.onChange(async (value) => {
+					this.plugin.settings.longInterval = Number.parseInt(value);
+					await this.plugin.saveSettings();
+				}));
+		new Setting(containerEl)
+			.setName('focus')
+			.setDesc('フォーカスタイム(秒)')
+			.addText(text => text
+				.setPlaceholder('Enter focus time')
+				.setValue(this.plugin.settings.focus.toString())
+				.onChange(async (value) => {
+					this.plugin.settings.focus = Number.parseInt(value);
+					await this.plugin.saveSettings();
+				}))
 	}
 }
